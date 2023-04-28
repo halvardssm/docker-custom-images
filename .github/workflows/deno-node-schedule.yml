@@ -27,7 +27,7 @@ jobs:
       run: echo "VERSION=$(node --version)" >> "$GITHUB_OUTPUT"
     - name: Get latest Deno version
       id: deno-version
-      run: echo "VERSION=$(deno --version)" >> "$GITHUB_OUTPUT"
+      run: echo "VERSION=$(deno -V | grep -oE '[^ ]+$')" >> "$GITHUB_OUTPUT"
     - name: Check if version exists on hub
       id: docker-version
       run: curl -s "https://hub.docker.com/v2/repositories/halvardm/deno-node/tags/${{ steps.node-version.outputs.VERSION }}-${{ steps.deno-version.outputs.VERSION }}/" | jq '.name'
