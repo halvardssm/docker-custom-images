@@ -31,5 +31,7 @@ jobs:
     - name: Check if version exists on hub
       id: docker-version
       run: curl -s "https://hub.docker.com/v2/repositories/halvardm/deno-node/tags/${{ steps.node-version.outputs.VERSION }}-${{ steps.deno-version.outputs.VERSION }}/" | jq '.name'
+    - run: echo "${{ steps.node-version.outputs.VERSION }} - ${{ steps.deno-version.outputs.VERSION }} - ${{ steps.docker-version.outputs.VERSION }}"
+
 #     - name: Build the Docker image
 #       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
