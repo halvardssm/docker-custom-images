@@ -33,7 +33,7 @@ jobs:
       run: echo "VERSION=${{ steps.node-version.outputs.VERSION }}-${{ steps.deno-version.outputs.VERSION }}" >> "$GITHUB_OUTPUT"
     - name: Check if version exists on hub
       id: docker-version
-      run: curl -s "https://hub.docker.com/v2/repositories/halvardm/deno-node/tags/${{ steps.image-version.outputs.VERSION }}/" | jq '.name'
+      run: curl -s "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/deno-node/tags/${{ steps.image-version.outputs.VERSION }}/" | jq '.name'
     - run: echo "Image version ${{ steps.image-version.outputs.VERSION }}, Node version ${{ steps.node-version.outputs.VERSION }}, Deno version ${{ steps.deno-version.outputs.VERSION }}, Docker version ${{ steps.docker-version.outputs.VERSION }}"
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
