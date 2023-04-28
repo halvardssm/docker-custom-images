@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   schedule:
-  - cron: "0 2 * * *"
+  - cron: "0 5 * * *"
   push:
     branches:
     - main
@@ -24,14 +24,24 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Get latest Node version
       id: node-version
-      run: echo "VERSION=$(node --version)" >> "$GITHUB_OUTPUT"
+      run: echo "VERSION=$(node --version | grep -oE '[^v].*$')" >> "$GITHUB_OUTPUT"
     - name: Get latest Deno version
       id: deno-version
       run: echo "VERSION=$(deno -V | grep -oE '[^ ]+$')" >> "$GITHUB_OUTPUT"
+    - name: Get image version
+      id: image-version
+      run: echo "VERSION=${{ steps.node-version.outputs.VERSION }}-${{ steps.deno-version.outputs.VERSION }}" >> "$GITHUB_OUTPUT"
     - name: Check if version exists on hub
       id: docker-version
-      run: curl -s "https://hub.docker.com/v2/repositories/halvardm/deno-node/tags/${{ steps.node-version.outputs.VERSION }}-${{ steps.deno-version.outputs.VERSION }}/" | jq '.name'
-    - run: echo "${{ steps.node-version.outputs.VERSION }} - ${{ steps.deno-version.outputs.VERSION }} - ${{ steps.docker-version.outputs.VERSION }}"
-
-#     - name: Build the Docker image
-#       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: curl -s "https://hub.docker.com/v2/repositories/halvardm/deno-node/tags/${{ steps.image-version.outputs.VERSION }}/" | jq '.name'
+    - run: echo "Image version ${{ steps.image-version.outputs.VERSION }}, Node version ${{ steps.node-version.outputs.VERSION }}, Deno version ${{ steps.deno-version.outputs.VERSION }}, Docker version ${{ steps.docker-version.outputs.VERSION }}"
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v4
+      if: ${{ steps.docker-version.outputs.VERSION == '' }}
+      with:
+        context: ./deno-node
+        pull: true
+        push: true
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.image-version.outputs.VERSION }}
