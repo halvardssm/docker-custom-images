@@ -43,5 +43,5 @@ jobs:
         pull: true
         push: true
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.image-version.outputs.VERSION }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/deno-docker:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/deno-docker:${{ steps.image-version.outputs.VERSION }}
