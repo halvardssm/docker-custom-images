@@ -37,7 +37,7 @@ jobs:
     - run: echo "Image version ${{ steps.image-version.outputs.VERSION }}, Node version ${{ steps.node-version.outputs.VERSION }}, Deno version ${{ steps.deno-version.outputs.VERSION }}, Docker version ${{ steps.docker-version.outputs.VERSION }}"
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
-      if: ${{ steps.docker-version.outputs.VERSION == '' }}
+      if: ${{ steps.docker-version.outputs.VERSION != steps.image-version.outputs.VERSION }}
       with:
         context: ./deno-node
         pull: true
