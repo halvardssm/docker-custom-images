@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - asdf/**
-      - deno-node/**
 
 jobs:
   asdf:
