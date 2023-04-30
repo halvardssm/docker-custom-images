@@ -33,7 +33,7 @@ jobs:
         run: echo "VERSION=${{ steps.brew-version.outputs.VERSION }}-${{ steps.asdf-version.outputs.VERSION }}" >> "$GITHUB_OUTPUT"
       - name: Check if version exists on hub
         id: docker-version
-        run: echo "VERSION=$(curl -s 'https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}/tags/${{ steps.image-version.outputs.VERSION }}/' | jq '.name')" >> "$GITHUB_OUTPUT"
+        run: echo "VERSION=$(curl -s 'https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}/tags/${{ steps.image-version.outputs.VERSION }}/' | jq '.name' | tr -d '"')" >> "$GITHUB_OUTPUT"
       - run: echo "Image version ${{ steps.image-version.outputs.VERSION }}, Brew version ${{ steps.brew-version.outputs.VERSION }}, Asdf version ${{ steps.asdf-version.outputs.VERSION }}, Docker version ${{ steps.docker-version.outputs.VERSION }}"
       - name: Build and push Docker images
         uses: docker/build-push-action@v4
