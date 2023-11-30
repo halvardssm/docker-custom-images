@@ -4,9 +4,9 @@ A set of custom images for Docker.
 
 ## Images
 
-### asdf
+### ubuntu-base
 
-A repo built from brew and asdf to potentially include a set of languages and tools.
+A repo built from ubuntu to provide a base to build other images from.
 
 ### deno-node
 
