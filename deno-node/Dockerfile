@@ -2,6 +2,9 @@ FROM halvardm/ubuntu-base:latest
 
 # Install Node.js with NVM
 RUN curl -L https://bit.ly/n-install | bash -s -- -y
+ENV N_PREFIX="/root/n"
+ENV PATH="$N_PREFIX/bin:$PATH"
+RUN n lts
 RUN npm install -g npm@latest yarn
 
 # Install Deno
