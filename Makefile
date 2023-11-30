@@ -1,10 +1,10 @@
 DOCKER_USERNAME=halvardm
-IMAGE_ASDF=asdf
+IMAGE_BASE=ubuntu-base
 IMAGE_DENO_NODE=deno-node
 
-build_asdf:
-	docker build -t ${USERNAME}/${IMAGE_ASDF}:latest .
+build_base:
+	docker build -t ${DOCKER_USERNAME}/${IMAGE_ASDF}:latest ubuntu-base
 
 build_deno_node:
-	docker build -t ${USERNAME}/${IMAGE_DENO_NODE}:latest .
+	docker build --platform=linux/amd64 -t ${DOCKER_USERNAME}/${IMAGE_DENO_NODE}:latest deno-node
 

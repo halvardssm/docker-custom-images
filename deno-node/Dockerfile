@@ -1,20 +1,16 @@
-FROM halvardm/asdf:latest
+FROM halvardm/ubuntu-base:latest
 
-# Set arguments for Node.js and Deno versions
-ARG NODE_VERSION=latest
-ARG DENO_VERSION=latest
+# Get args
+ARG DENO_VERSION
+ARG NODE_VERSION
 
-# Install necessary dependencies for Node.js and Deno
-RUN sudo apt install gpg curl gawk -y
+# Install Node.js with NVM
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+RUN source /root/.bashrc && nvm install --lts --latest-npm && nvm use --lts
+RUN if [ -n "$NODE_VERSION" ]; then nvm install $NODE_VERSION && nvm use $NODE_VERSION; fi
 
-# Install Node.js and Deno
-RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-RUN asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
-
-# Install Node.js and Deno versions
-RUN asdf install nodejs ${NODE_VERSION}
-RUN asdf install deno ${DENO_VERSION}
-
-# Set Node.js and Deno versions as global
-RUN asdf global nodejs ${NODE_VERSION}
-RUN asdf global deno ${DENO_VERSION}
+# Install Deno
+RUN curl -fsSL https://deno.land/install.sh | sh
+ENV DENO_INSTALL="/root/.deno"
+ENV PATH="$DENO_INSTALL/bin:$PATH"
+RUN if [ -n "$DENO_VERSION" ]; then deno upgrade --version $DENO_VERSION; fi
