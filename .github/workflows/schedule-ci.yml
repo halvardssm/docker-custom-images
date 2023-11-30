@@ -79,6 +79,3 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.image-version.outputs.VERSION }}
-          build-args: |
-            NODE_VERSION=${{ steps.node-version.outputs.VERSION }}
-            DENO_VERSION=${{ steps.deno-version.outputs.VERSION }}
